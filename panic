@@ -1,0 +1,42 @@
+Anonymous UUID:       E131A186-246A-842B-EFC5-F415742F8424
+
+Thu Nov 12 21:11:08 2015
+
+*** Panic Report ***
+panic(cpu 4 caller 0xffffff8018b6bfe0): "a freed zone element has been modified in zone kalloc.16: expected 0xdb989f7c479ae940 but found 0xdeadbe0036313337, bits changed 0x535217c71abda77, at offset 0 of 16 in element 0xffffff804b8ff370, cookies 0x3f001140b565dd44 0x5352193993757af"@/SourceCache/xnu/xnu-2782.40.9/osfmk/kern/zalloc.c:496
+Backtrace (CPU 4), Frame : Return Address
+0xffffff81d578b8d0 : 0xffffff8018b2ad21
+0xffffff81d578b950 : 0xffffff8018b6bfe0
+0xffffff81d578b9c0 : 0xffffff8018b6b667
+0xffffff81d578ba00 : 0xffffff8018b6a837
+0xffffff81d578bb30 : 0xffffff8018b33581
+0xffffff81d578bb60 : 0xffffff8019079bd0
+0xffffff81d578bb80 : 0xffffff8019079dbf
+0xffffff81d578bbb0 : 0xffffff801907759f
+0xffffff81d578bc00 : 0xffffff801905fb83
+0xffffff81d578bc40 : 0xffffff8019061799
+0xffffff81d578bc80 : 0xffffff8019061799
+0xffffff81d578bcc0 : 0xffffff801906f260
+0xffffff81d578bd40 : 0xffffff8019080c56
+0xffffff81d578bdc0 : 0xffffff8018b7230d
+0xffffff81d578be10 : 0xffffff8018b2ef8c
+0xffffff81d578be40 : 0xffffff8018b139f3
+0xffffff81d578be90 : 0xffffff8018b2429d
+0xffffff81d578bf10 : 0xffffff8018c02115
+0xffffff81d578bfb0 : 0xffffff8018c34278
+
+BSD process name corresponding to current thread: tpwn-bis
+Boot args: -v
+
+Mac OS version:
+14F27
+
+Kernel version:
+Darwin Kernel Version 14.5.0: Wed Jul 29 02:26:53 PDT 2015; root:xnu-2782.40.9~1/RELEASE_X86_64
+Kernel UUID: 58F06365-45C7-3CA7-B80D-173AFD1A03C4
+Kernel slide:     0x0000000018800000
+Kernel text base: 0xffffff8018a00000
+__HIB  text base: 0xffffff8018900000
+System model name: MacPro6,1 (Mac-F60DEB81FF30ACF6)
+
+[... snip ...]
