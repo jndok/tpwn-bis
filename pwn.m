@@ -12,10 +12,6 @@ uint16_t pwn_init(void)
   assert(kr==KERN_SUCCESS);
   io_audio_controller = IOIteratorNext(iter);
 
-  kr=IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(IOHDIX), &iter);
-  assert(kr==KERN_SUCCESS);
-  io_hdix_controller=IOIteratorNext(iter);
-
   pwn_init_set|=0x1;
 
   return 0;
@@ -56,7 +52,12 @@ uint16_t or_primitive(uint64_t where)
   };
 
   kern_return_t kr;
+  io_iterator_t iter;
   io_connect_t conn = MACH_PORT_NULL;
+
+  kr=IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(IOHDIX), &iter);
+  assert(kr==KERN_SUCCESS);
+  io_hdix_controller=IOIteratorNext(iter);
 
   static uint32_t offset;
 
